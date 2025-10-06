@@ -1,4 +1,4 @@
-# Лаборторная работа
+# Лаборторная работа 2
 ## Номер 1
 <img width="2818" height="1366" alt="src01 greeting" src="https://github.com/user-attachments/assets/4b4812e3-07b7-402d-9068-d270a7d5c2ee" />
 
