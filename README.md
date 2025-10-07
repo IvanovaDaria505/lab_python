@@ -1,5 +1,16 @@
 # Лаборторная работа 2
 ## Номер 1
+```
+def min_max(nums: list[float | int] ) -> tuple[float | int, float | int]:
+    if not nums:
+        raise ValueError
+    return (min(nums), max(nums))
+print(min_max([3,-1,5,5,0]))
+print(min_max([42]))
+print(min_max([-5,-2,-9]))
+print(min_max([1.5,2,2.0,-3.1]))
+print(min_max([]))
+```
 <img width="2818" height="1366" alt="src01 greeting" src="https://github.com/user-attachments/assets/4b4812e3-07b7-402d-9068-d270a7d5c2ee" />
 
 ## Номер 2
