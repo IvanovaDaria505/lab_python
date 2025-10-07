@@ -122,20 +122,24 @@ from typing import Tuple
 StudentRecord = Tuple[str, str, float]
 
 def format_record(rec: StudentRecord) -> str:
+    if len(rec) != 3:
+        raise ValueError
     fio, group, gpa = rec
+    if not isinstance(gpa, (int, float)):
+        raise ValueError
+    if gpa < 0 or gpa > 5:
+        raise ValueError
     fio_parts = [part.strip() for part in fio.split()]
+    if len(fio_parts) < 2:
+        raise ValueError
     formatted_surname = fio_parts[0].capitalize()
     initials = ''.join([f'{name[0].upper()}.' for name in fio_parts[1:]])
     formatted_gpa = f'{gpa:.2f}'
     formatted_record = f"{formatted_surname} {initials}, гр. {group}, GPA {formatted_gpa}"
     return formatted_record
 
-print(format_record(("Иванов Иван Иванович", "BIVT-25", 4.605)))
-print(format_record(("Петров Пётр", "IKBO-12", 5.0)))
-print(format_record(("Петров Пётр Петрович", "IKBO-12", 5.0)))
-print(format_record(("  сидорова  анна   сергеевна ", "ABB-01", 3.999)))
 ```
-<img width="1817" height="1246" alt="tuples" src="https://github.com/user-attachments/assets/0c97cd51-cc2f-41b8-8b50-7f616fd00762" />
+<img width="1828" height="1523" alt="3" src="https://github.com/user-attachments/assets/d1fff852-7fea-4dee-b281-49639e38414f" />
 
 
 
