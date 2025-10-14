@@ -64,7 +64,7 @@ print(top_n(freq_2, n=2))
 from lib.text import normalize, tokenize, count_freq, top_n
 import sys
 def main():
-    text = sys.stdin.buffer.read().decode('utf-8')
+    text = sys.stdin.buffer.read().decode('utf-8') #вход к бинарным данным,преобразует строку в юникод
     if not text.strip():
         print("Нет входных данных")
         return
@@ -76,10 +76,10 @@ def main():
         print("В тексте не найдено слов")
         return
 
-    total_words = len(tokens)
-    freq_dict = count_freq(tokens)
-    unique_words = len(freq_dict)
-    top_words = top_n(freq_dict, 5)
+    total_words = len(tokens) # общее количество слов
+    freq_dict = count_freq(tokens) # словарь частот
+    unique_words = len(freq_dict) # количеситво уникальных слов 
+    top_words = top_n(freq_dict, 5) # самые популярные частоты
     
     print(f"Всего слов: {total_words}")
     print(f"Уникальных слов: {unique_words}")
