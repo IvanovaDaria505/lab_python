@@ -1,5 +1,22 @@
-from lib.text import normalize, tokenize, count_freq, top_n
 import sys
+import re
+
+def normalize(text: str) -> str:
+    return text.casefold()
+
+def tokenize(text: str) -> list[str]:
+    return re.findall(r'\w+(?:-\w+)*', text)
+
+def count_freq(tokens: list[str]) -> dict[str, int]:
+    freq = {}
+    for token in tokens:
+        freq[token] = freq.get(token, 0) + 1
+    return freq
+
+def top_n(freq: dict[str, int], n: int = 5) -> list[tuple[str, int]]:
+    items = list(freq.items())
+    items.sort(key=lambda x: (-x[1], x[0]))
+    return items[:n]
 
 def main():
     text = sys.stdin.read()
@@ -10,6 +27,7 @@ def main():
 
     normalized_text = normalize(text)
     tokens = tokenize(normalized_text)
+    
     if not tokens:
         print("В тексте не найдено слов")
         return
@@ -25,12 +43,7 @@ def main():
     for word, count in top_words:
         print(f"{word}: {count}")
 
-
 if __name__ == "__main__":  
     main()
+    echo 'Привет, мир! Привет!!!' | python3 src/lab3/text_stats.py
     
-    
-    
-
-
-
