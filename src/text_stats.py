@@ -1,17 +1,14 @@
 from lib.text import normalize, tokenize, count_freq, top_n
 import sys
-
 def main():
-    text = sys.stdin.read()
-
+    text = sys.stdin.buffer.read().decode('utf-8')
     if not text.strip():
         print("Нет входных данных")
         return
-
     normalized_text = normalize(text)
     tokens = tokenize(normalized_text)
     
-    
+
     if not tokens:
         print("В тексте не найдено слов")
         return

@@ -9,7 +9,7 @@ def normalize(text: str, *, casefold: bool = True, yo2e: bool = True) -> str:
     return text
 
 def tokenize(text: str) -> list[str]:
-    return re.findall(r'[a-zA-Zа-яА-ЯёЁ]+', text)
+    return re.findall(r'\w+(?:-\w+)*', text)
 def count_freq(tokens: list[str]) -> dict[str, int]:
     c = {}  
     for w in tokens:
