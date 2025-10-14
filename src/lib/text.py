@@ -1,3 +1,4 @@
+import re 
 def normalize(text: str, *, casefold: bool = True, yo2e: bool = True) -> str:
     text = text.casefold()
     if yo2e:
@@ -6,10 +7,10 @@ def normalize(text: str, *, casefold: bool = True, yo2e: bool = True) -> str:
     text = ' '.join(text.split())
     text = text.strip()
     return text
-import re 
+
 def tokenize(text: str) -> list[str]:
     return re.findall(r'\w+(?:-\w+)*', text)
- def count_freq(tokens: list[str]) -> dict[str, int]:
+def count_freq(tokens: list[str]) -> dict[str, int]:
     c = {}  
     for w in tokens:
         cu = c.get(w, 0)

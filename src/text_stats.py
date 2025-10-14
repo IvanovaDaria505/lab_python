@@ -31,6 +31,5 @@ def main():
 if __name__ == "__main__":  
     main()
     
-echo 'Привет, мир! Привет!!!' | python3 src/lab3/text_stats.py
 
 
