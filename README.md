@@ -1,22 +1,79 @@
-# Лаборторная работа 1
-## Номер 1
-<img width="2818" height="1366" alt="src01 greeting" src="https://github.com/user-attachments/assets/4b4812e3-07b7-402d-9068-d270a7d5c2ee" />
+# Лаборторная работа 4
+## Задание A — модуль src/lab04/io_txt_csv.py
+```
+import csv
+from pathlib import Path
+from typing import Iterable, Sequence
+from pathlib import Path
 
-## Номер 2
-<img width="2739" height="1346" alt="src02_sum_avg" src="https://github.com/user-attachments/assets/504062a3-eb3d-41d0-a303-bb7db312239f" />
+def read_text(path: str | Path, encoding: str = "utf-8") -> str:
+    try:
+        return Path(path).read_text(encoding=encoding)
+    except FileNotFoundError:
+        return "Такого файла нету"
+    except UnicodeDecodeError:
+        return "Неудалось изменить кодировку"
 
-## Номер 3
-<img width="2838" height="1080" alt="src03_discount_vat" src="https://github.com/user-attachments/assets/4987a917-7a4b-47b5-9976-81861067af31" />
+def write_csv(rows: list[tuple | list], path: str | Path, header: tuple[str, ...] | None = None) -> None:
+    p = Path(path)
+    with p.open('w', newline="", encoding="utf-8") as file:
+        f = csv.writer(file)   
+        if header is not None:
+            f.writerow(header)
+        if rows != []:
+            const = len(rows[0])
+            for i in rows:
+                if len(i) != const:
+                    return ValueError
+        f.writerows(rows)
 
-## Номер 4
-<img width="2317" height="850" alt="src04_minutes_to_hhmm" src="https://github.com/user-attachments/assets/4c1f18a1-975e-44d2-9049-ed18fa858ead" />
+def ensure_parent_dir(path: str | Path) -> None:
+    Path(path).parent.mkdir(parents=True, exist_ok=True)
 
-## Номер 5
-<img width="1232" height="825" alt="scr05_initials_and_lenn (2)" src="https://github.com/user-attachments/assets/89e915f6-1bf1-46b6-be32-b741583bc337" />
-
-
-## Номер 6
-<img width="2536" height="1315" alt="6" src="https://github.com/user-attachments/assets/d6381491-7563-4061-919f-19f6936733bd" />
-
+print(read_text(r"C:\Users\Home\Documents\GitHub\lab_01\data\input.txt"))
+write_csv([("word","count"),("test",3)], r"C:\Users\Home\Documents\GitHub\lab_01\data\check.csv") 
+```
+<img width="1314" height="197" alt="1_1" src="https://github.com/user-attachments/assets/0722fce8-a6af-4549-bc07-275aa7828031" />
+<img width="1408" height="332" alt="1_2" src="https://github.com/user-attachments/assets/a5a29715-d979-41d5-90bb-589dffc9b136" />
 
 
+## Задание B — скрипт src/lab04/text_report.py
+```
+from io_txt_csv import read_text, write_csv, ensure_parent_dir
+import sys
+from pathlib import Path
+
+sys.path.append(r'C:\Users\Home\Documents\GitHub\lab_01\lib')
+
+from text import normalize, tokenize, count_freq, top_n
+
+
+def exist_path(path_f: str):
+    return Path(path_f).exists()
+
+
+def main(file: str, encoding: str = 'utf-8'):
+    if not exist_path(file):
+        return FileNotFoundError
+    
+    file_path = Path(file)
+    text = read_text(file, encoding=encoding)
+    norm = normalize(text)
+    tokens = tokenize(norm)
+    freq_dict = count_freq(tokens)
+    top = top_n(freq_dict, 5)
+    top_sort = sorted(top, key=lambda x: (x[1], x[0]), reverse=True)
+    report_path = file_path.parent / 'report.csv'
+    write_csv(top_sort, report_path, header=('word', 'count'))
+    
+    print(f'Всего слов: {len(tokens)}')
+    print(f'Уникальных слов: {len(freq_dict)}')
+    print('Топ-5:')
+    for cursor in top_sort:
+        print(f'{cursor[0]}: {cursor[-1]}')
+
+
+main(r'C:\Users\Home\Documents\GitHub\lab_01\data\input.txt')
+```
+<img width="1864" height="470" alt="2_1" src="https://github.com/user-attachments/assets/b5f1a3ea-24f8-44be-967c-70f44e5b7b9f" />
+<img width="2008" height="416" alt="2 2" src="https://github.com/user-attachments/assets/6c2e0d68-0796-4e13-972c-243c3e793090" />
