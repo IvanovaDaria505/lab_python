@@ -13,7 +13,7 @@ def exist_path(path_f: str):
 
 def main(file: str, encoding: str = 'utf-8'):
     if not exist_path(file):
-        return FileNotFoundError
+        raise FileNotFoundError
     
     file_path = Path(file)
     text = read_text(file, encoding=encoding)
