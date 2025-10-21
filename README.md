@@ -48,12 +48,12 @@ from text import normalize, tokenize, count_freq, top_n
 
 
 def exist_path(path_f: str):
-    return Path(path_f).exists()
+    return Path(path_f).exists() #существует ли файл 
 
 
 def main(file: str, encoding: str = 'utf-8'):
     if not exist_path(file):
-        return FileNotFoundError
+        raise FileNotFoundError
     
     file_path = Path(file)
     text = read_text(file, encoding=encoding)
