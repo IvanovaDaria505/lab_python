@@ -13,6 +13,8 @@ def write_csv(rows: list[tuple | list], path: str | Path, header: tuple[str, ...
     p = Path(path)
     with p.open('w', newline="", encoding="utf-8") as file:
         f = csv.writer(file)   
+        if header is None and rows == []:
+            file_c.writerow(('a', 'b'))
         if header is not None:
             f.writerow(header)
         if rows != []:
