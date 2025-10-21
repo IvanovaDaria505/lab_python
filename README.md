@@ -58,12 +58,12 @@ def main(file: str, encoding: str = 'utf-8'):
         raise FileNotFoundError 
     
     file_path = Path(file)
-    text = read_text(file, encoding=encoding)
-    norm = normalize(text)
+    text = read_text(file, encoding=encoding) # текст в одну строку
+    norm = normalize(text) 
     tokens = tokenize(norm)
     freq_dict = count_freq(tokens)
     top = top_n(freq_dict, 5)
-    top_sort = sorted(top, key=lambda x: (x[1], x[0]), reverse=True) # сортирует список, критерии сортировки, частота слово и само слово, сортировка по убыванию)
+    top_sort = sorted(top, key=lambda x: (x[1], x[0]), reverse=True) # сортирует список, критерии сортировки, частота слово и само слово, сортировка по убыванию
     report_path = file_path.parent / 'report.csv' # cоздает путь для файла отчета в той же папке, где исходный файл
     write_csv(top_sort, report_path, header=('word', 'count'))
     
