@@ -1,6 +1,6 @@
 # Лаборторная работа 4
 ## Задание A — модуль src/lab04/io_txt_csv.py
-```
+```python
 import csv
 from pathlib import Path
 from typing import Iterable, Sequence
