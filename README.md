@@ -51,9 +51,9 @@ def exist_path(path_f: str):
     return Path(path_f).exists() #существует ли файл 
 
 
-def main(file: str, encoding: str = 'utf-8'):
+def main(file: str, encoding: str = 'utf-8'): 
     if not exist_path(file):
-        raise FileNotFoundError
+        raise FileNotFoundError 
     
     file_path = Path(file)
     text = read_text(file, encoding=encoding)
@@ -61,8 +61,8 @@ def main(file: str, encoding: str = 'utf-8'):
     tokens = tokenize(norm)
     freq_dict = count_freq(tokens)
     top = top_n(freq_dict, 5)
-    top_sort = sorted(top, key=lambda x: (x[1], x[0]), reverse=True)
-    report_path = file_path.parent / 'report.csv'
+    top_sort = sorted(top, key=lambda x: (x[1], x[0]), reverse=True) # сортирует список, критерии сортировки, частота слово и само слово, сортировка по убыванию)
+    report_path = file_path.parent / 'report.csv' # cоздает путь для файла отчета в той же папке, где исходный файл
     write_csv(top_sort, report_path, header=('word', 'count'))
     
     print(f'Всего слов: {len(tokens)}')
