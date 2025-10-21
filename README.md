@@ -4,7 +4,6 @@
 import csv
 from pathlib import Path
 from typing import Iterable, Sequence
-from pathlib import Path
 
 def read_text(path: str | Path, encoding: str = "utf-8") -> str:
     try:
