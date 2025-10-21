@@ -16,7 +16,9 @@ def read_text(path: str | Path, encoding: str = "utf-8") -> str:
 def write_csv(rows: list[tuple | list], path: str | Path, header: tuple[str, ...] | None = None) -> None:
     p = Path(path)
     with p.open('w', newline="", encoding="utf-8") as file:
-        f = csv.writer(file)   
+        f = csv.writer(file)
+        if header is None and rows == []:
+            file_c.writerow(('a', 'b')) 
         if header is not None:
             f.writerow(header)
         if rows != []:
