@@ -8,8 +8,8 @@ def is_valid_json_file(file_path: str) -> bool:
             return False
         
         with open(file_path, 'r', encoding='utf-8') as file:
-            json_data = json.load(file)
-            return isinstance(json_data, list) and len(json_data) > 0 and all(isinstance(item, dict) for item in json_data) 
+            json_data = json.load(file) #pагружает JSON данные из файла.
+            return isinstance(json_data, list) and len(json_data) > 0 and all(isinstance(item, dict) for item in json_data) # является ли списком, список не пустой, все элементы списка являются словарями
     except:
         return False
 
@@ -20,20 +20,20 @@ def is_valid_csv_file(file_path: str) -> bool:
             
         with open(file_path, 'r', encoding='utf-8') as file:
             reader = csv.reader(file)  
-            header = next(reader, None) 
+            header = next(reader, None) #читает CSV файл и получает первую строку
             return header is not None and len(header) > 0
     except:
         return False
 
 def json_to_csv(json_path: str, csv_path: str) -> None:
-    if not is_valid_json_file(json_path): 
+    if not is_valid_json_file(json_path): # JSON файл не соотвествует критериям, выводит ошибку и завершит программу
         print("ValueError: Input file is not a valid JSON or is empty")
         sys.exit(1) 
     json_path=Path(json_path)
     csv_path=Path(csv_path)
-    if json_path.suffix.lower() != ".json":
+    if json_path.suffix.lower() != ".json": #проверка расширения файлов, lower-метод преобразования в нижний регистр
         raise ValueError(f"Неверный формат входного файла: ожидается .json")
-    if csv_path.suffix.lower() != ".csv":
+    if csv_path.suffix.lower() != ".csv":  #проверка расширения файлов
         raise ValueError(f"Неверный формат выходного файла: ожидается .csv")
     
 
@@ -41,7 +41,7 @@ def json_to_csv(json_path: str, csv_path: str) -> None:
         json_data = json.load(json_file) 
 
     with open(csv_path, 'w', newline='', encoding='utf-8') as csvfile:
-        writer = csv.DictWriter(csvfile, fieldnames=json_data[0].keys()) 
+        writer = csv.DictWriter(csvfile, fieldnames=json_data[0].keys()) #создает CSV файл с заголовками из ключей первого элемента JSON, названия колонок = ключи первого элемента
         writer.writeheader()  
         writer.writerows(json_data) 
 
@@ -57,7 +57,7 @@ def csv_to_json(csv_path: str, json_path: str) -> None:
         raise ValueError(f"Неверный формат входного файла: ожидается .csv")
 
     with open(csv_path, 'r', encoding='utf-8') as csvfile:
-        reader = csv.DictReader(csvfile)  
+        reader = csv.DictReader(csvfile)  #читает CSV как список словарей
         data = list(reader) 
     
     with open(json_path, 'w', encoding='utf-8') as jsonfile:
@@ -83,28 +83,28 @@ from openpyxl import Workbook
 def csv_to_xlsx(csv_path: str, xlsx_path: str) -> None: 
     if not os.path.exists(csv_path):  
         print("FileNotFoundError") 
-        sys.exit(1) 
+        sys.exit(1) #завершает программу с ошибкой 1
     xlsx_path=Path(xlsx_path)
     csv_path=Path(csv_path)
-    if xlsx_path.suffix.lower() != ".xlsx":
+    if xlsx_path.suffix.lower() != ".xlsx": #получает расширение файла,преобразует в нижний регистр
         raise ValueError(f"Неверный формат выходного файла: ожидается .xlsx")
     if csv_path.suffix.lower() != ".csv":
         raise ValueError(f"Неверный формат входного файла: ожидается .csv")
 
-    if os.path.getsize(csv_path) == 0: 
+    if os.path.getsize(csv_path) == 0: #получает размер файла в байтах
         print("ValueError")
         sys.exit(1)
-    wb = Workbook() 
-    ws = wb.active  
-    ws.title = "Sheet1" 
+    wb = Workbook() # c
+    ws = wb.active  #получает активный лист
+    ws.title = "Sheet1" #устанавливает название листа "Sheet1"
 
     with open(csv_path, "r", encoding="utf-8") as csv_file: 
-        reader = csv.reader(csv_file) 
+        reader = csv.reader(csv_file) # создает объект для чтения CSV построчно
         for row in reader: 
             ws.append(row) 
     for column_cells in ws.columns: 
         max_length = 0 
-        column_letter = column_cells[0].column_letter 
+        column_letter = column_cells[0].column_letter #получает букву колонки
         for cell in column_cells: 
             if cell.value: 
                 max_length = max(max_length, len(str(cell.value))) 
