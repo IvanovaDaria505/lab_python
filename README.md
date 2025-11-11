@@ -1,5 +1,4 @@
-## Лабораторная работа 5
-### Задание A — JSON ↔ CSV
+
 ```python
 import csv, json, sys, os
 from pathlib import Path
