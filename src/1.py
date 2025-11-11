@@ -7,7 +7,7 @@ def is_valid_json_file(file_path: str) -> bool:
         
         with open(file_path, 'r', encoding='utf-8') as file:
             json_data = json.load(file)
-            return isinstance(json_data, list) and len(json_data) > 0 and all(isinstance(item, dict) for item in json_data) #все элементы в списке являются словарями
+            return isinstance(json_data, list) and len(json_data) > 0 and all(isinstance(item, dict) for item in json_data) 
     except:
         return False
 
@@ -17,16 +17,16 @@ def is_valid_csv_file(file_path: str) -> bool:
             return False
             
         with open(file_path, 'r', encoding='utf-8') as file:
-            reader = csv.reader(file)  # Создаем объект reader для чтения CSV файла построчно
-            header = next(reader, None) # Читаем первую строку (заголовок) из CSV файла
+            reader = csv.reader(file)  
+            header = next(reader, None) 
             return header is not None and len(header) > 0
     except:
         return False
 
 def json_to_csv(json_path: str, csv_path: str) -> None:
-    if not is_valid_json_file(json_path): # Проверяем валидность CSV файла с помощью нашей функции
+    if not is_valid_json_file(json_path):
         print("ValueError: Input file is not a valid JSON or is empty")
-        sys.exit(1) # Завершаем программу с кодом ошибки 1
+        sys.exit(1) 
     json_path=Path(json_path)
     csv_path=Path(csv_path)
     if json_path.suffix.lower() != ".json":
@@ -36,12 +36,12 @@ def json_to_csv(json_path: str, csv_path: str) -> None:
     
 
     with open(json_path, 'r', encoding='utf-8') as json_file:
-        json_data = json.load(json_file) # Загружаем и парсим JSON данные в переменную json_data
+        json_data = json.load(json_file) 
 
     with open(csv_path, 'w', newline='', encoding='utf-8') as csvfile:
-        writer = csv.DictWriter(csvfile, fieldnames=json_data[0].keys()) # Создаем объект DictWriter для записи словарей в CSV
-        writer.writeheader()  # Записываем заголовок в CSV файл
-        writer.writerows(json_data) # Записываем все данные из json_data в CSV файл построчно
+        writer = csv.DictWriter(csvfile, fieldnames=json_data[0].keys()) 
+        writer.writeheader()  
+        writer.writerows(json_data) 
 
 def csv_to_json(csv_path: str, json_path: str) -> None:
     if not is_valid_csv_file(csv_path):
@@ -55,11 +55,11 @@ def csv_to_json(csv_path: str, json_path: str) -> None:
         raise ValueError(f"Неверный формат входного файла: ожидается .csv")
 
     with open(csv_path, 'r', encoding='utf-8') as csvfile:
-        reader = csv.DictReader(csvfile)  # Создаем объект DictReader для чтения CSV в виде словарей
-        data = list(reader) # Читаем все строки и преобразуем в список словарей
+        reader = csv.DictReader(csvfile) 
+        data = list(reader) 
     
     with open(json_path, 'w', encoding='utf-8') as jsonfile:
-        json.dump(data, jsonfile, ensure_ascii=False, indent=4) #разрешаем Unicode символы м красиво форматирум с отпступом 4 пробела
+        json.dump(data, jsonfile, ensure_ascii=False, indent=4) 
 csv_to_json(r"C:\Users\Home\lab_python\lab_python-2\data\samples\people.csv",r"C:\Users\Home\lab_python\lab_python-2\data\out\people_from_csv.json")
 
 json_to_csv( r"C:\Users\Home\lab_python\lab_python-2\data\samples\people.json",  r"C:\Users\Home\lab_python\lab_python-2\data\out\people_from_json.csv" )
