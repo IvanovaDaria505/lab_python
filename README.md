@@ -32,7 +32,7 @@ def json_to_csv(json_path: str, csv_path: str) -> None:
         sys.exit(1) 
     json_path=Path(json_path)
     csv_path=Path(csv_path)
-    if json_path.suffix.lower() != ".json": #проверка расширения файлов
+    if json_path.suffix.lower() != ".json": #проверка расширения файлов, lower-метод преобразования в нижний регистр
         raise ValueError(f"Неверный формат входного файла: ожидается .json")
     if csv_path.suffix.lower() != ".csv":  #проверка расширения файлов
         raise ValueError(f"Неверный формат выходного файла: ожидается .csv")
