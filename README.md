@@ -67,10 +67,10 @@ csv_to_json(r"C:\Users\Home\lab_python\lab_python-2\data\samples\people.csv",r"C
 
 json_to_csv( r"C:\Users\Home\lab_python\lab_python-2\data\samples\people.json",  r"C:\Users\Home\lab_python\lab_python-2\data\out\people_from_json.csv" )
 ```
-
-![Картинка 1](./images/image02.png)
-![Картинка 1](./images/image03.png)
-![Картинка 1](./images/image04.png)
+![alt text](images/image.png)
+![alt text](images/image01.png)
+![alt text](<images/imange 4.png>)
+![alt text](images/IMANGE.png)
 
 ### Задание B — CSV → XLSX
 
@@ -113,5 +113,5 @@ def csv_to_xlsx(csv_path: str, xlsx_path: str) -> None:
     wb.save(xlsx_path)
 csv_to_xlsx(r"C:\Users\Home\lab_python\lab_python-2\data\samples\cities.csv", r"C:\Users\Home\lab_python\lab_python-2\data\out\people.xlsx")    
 ```
-![Картинка 1](./images/image05.png)
-![Картинка 1](./images/image06.png)
+![alt text](images/imange5.png)
+![alt text](images/imange6.png)
