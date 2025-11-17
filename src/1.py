@@ -1,65 +1,42 @@
-import csv, json, sys, os
+import argparse
 from pathlib import Path
-def is_valid_json_file(file_path: str) -> bool:
-    try:
-        if not os.path.exists(file_path) or os.path.getsize(file_path) == 0:
-            return False
-        
-        with open(file_path, 'r', encoding='utf-8') as file:
-            json_data = json.load(file)
-            return isinstance(json_data, list) and len(json_data) > 0 and all(isinstance(item, dict) for item in json_data) #все элементы в списке являются словарями
-    except:
-        return False
-
-def is_valid_csv_file(file_path: str) -> bool:
-    try:
-        if not os.path.exists(file_path) or os.path.getsize(file_path) == 0:
-            return False
-            
-        with open(file_path, 'r', encoding='utf-8') as file:
-            reader = csv.reader(file)  # Создаем объект reader для чтения CSV файла построчно
-            header = next(reader, None) # Читаем первую строку (заголовок) из CSV файла
-            return header is not None and len(header) > 0
-    except:
-        return False
-
-def json_to_csv(json_path: str, csv_path: str) -> None:
-    if not is_valid_json_file(json_path): # Проверяем валидность CSV файла с помощью нашей функции
-        print("ValueError: Input file is not a valid JSON or is empty")
-        sys.exit(1) # Завершаем программу с кодом ошибки 1
-    json_path=Path(json_path)
-    csv_path=Path(csv_path)
-    if json_path.suffix.lower() != ".json":
-        raise ValueError(f"Неверный формат входного файла: ожидается .json")
-    if csv_path.suffix.lower() != ".csv":
-        raise ValueError(f"Неверный формат выходного файла: ожидается .csv")
-    
-
-    with open(json_path, 'r', encoding='utf-8') as json_file:
-        json_data = json.load(json_file) # Загружаем и парсим JSON данные в переменную json_data
-
-    with open(csv_path, 'w', newline='', encoding='utf-8') as csvfile:
-        writer = csv.DictWriter(csvfile, fieldnames=json_data[0].keys()) # Создаем объект DictWriter для записи словарей в CSV
-        writer.writeheader()  # Записываем заголовок в CSV файл
-        writer.writerows(json_data) # Записываем все данные из json_data в CSV файл построчно
-
-def csv_to_json(csv_path: str, json_path: str) -> None:
-    if not is_valid_csv_file(csv_path):
-        print("ValueError: Input file is not a valid CSV or is empty")
-        sys.exit(1)
-    json_path=Path(json_path)
-    csv_path=Path(csv_path)
-    if json_path.suffix.lower() != ".json":
-        raise ValueError(f"Неверный формат выходного файла: ожидается .json")
-    if csv_path.suffix.lower() != ".csv":
-        raise ValueError(f"Неверный формат входного файла: ожидается .csv")
-
-    with open(csv_path, 'r', encoding='utf-8') as csvfile:
-        reader = csv.DictReader(csvfile)  # Создаем объект DictReader для чтения CSV в виде словарей
-        data = list(reader) # Читаем все строки и преобразуем в список словарей
-    
-    with open(json_path, 'w', encoding='utf-8') as jsonfile:
-        json.dump(data, jsonfile, ensure_ascii=False, indent=4) #разрешаем Unicode символы м красиво форматирум с отпступом 4 пробела
-csv_to_json(r"C:\Users\Home\lab_python\lab_python-2\data\samples\people.csv",r"C:\Users\Home\lab_python\lab_python-2\data\out\people_from_csv.json")
-
-json_to_csv( r"C:\Users\Home\lab_python\lab_python-2\data\samples\people.json",  r"C:\Users\Home\lab_python\lab_python-2\data\out\people_from_json.csv" )
+from lib.text import *
+def main():
+    parser = argparse.ArgumentParser(description="CLI‑утилиты лабораторной №6")
+    subparsers = parser.add_subparsers(dest="command")
+    cat_parser = subparsers.add_parser("cat", help="Вывести содержимое файла")
+    cat_parser.add_argument("--input", required=True)
+    cat_parser.add_argument("-n", action="store_true", help="Нумеровать строки")
+    stats_parser = subparsers.add_parser("stats", help="Частоты слов")
+    stats_parser.add_argument("--input", required=True)
+    stats_parser.add_argument("--top", type=int, default=5)
+    args = parser.parse_args()
+    file_path = Path(args.input)
+    if not file_path.exists():
+        parser.error(f"Файл '{args.input}' не найден")
+    if args.command == "cat":
+         try:
+            with file_path.open("r", encoding="utf-8") as f:
+                for i, line in enumerate(f, start=1):
+                    line = line.rstrip("\n")
+                    if args.n:
+                        print(f"{i}: {line}")
+                    else:
+                        print(line)
+    elif args.command == "stats":
+        try:
+            with file_path.open("r", encoding="utf-8") as f:
+                text = f.read()
+                top_words = top_n(count_freq(tokenize(normalize(text))), args.top)
+            if not top_words:
+                print("Слова в файле не найдены")
+                return
+            print(f"Топ {args.top} слов:")
+            for word, count in top_words:
+                print(f"{word}: {count}")
+        except Exception as e:
+            parser.error(f"Ошибка при чтении файла: {e}")
+    else:
+        parser.print_help()
+if __name__ == "__main__":
+    main()
