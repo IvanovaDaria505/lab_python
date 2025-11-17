@@ -37,6 +37,6 @@ def main():
         except Exception as e:
             parser.error(f"Ошибка при чтении файла: {e}")
     else:
-        parser.print_help()
+        parser.print_help()))
 if __name__ == "__main__":
     main()
