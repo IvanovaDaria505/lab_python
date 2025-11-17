@@ -1,9 +1,6 @@
 import argparse
 from lib.json_csv import *
 from lib.csv_xlsx import *
-import argparse
-from lib.json_csv import *
-from lib.csv_xlsx import *
 
 def main():
     parser = argparse.ArgumentParser(description="Конвертер JSON↔CSV, CSV→XLSX")
