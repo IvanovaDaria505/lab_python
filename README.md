@@ -6,12 +6,12 @@ from pathlib import Path
 from lib.text import normalize, tokenize, count_freq, top_n
 
 def main():
-    parser = argparse.ArgumentParser(description="CLI‑утилиты лабораторной №6")
-    subparsers = parser.add_subparsers(dest="command")
-    cat_parser = subparsers.add_parser("cat", help="Вывести содержимое файла")
+    parser = argparse.ArgumentParser(description="CLI‑утилиты лабораторной №6") #создание парсера аргументов с описанием программы
+    subparsers = parser.add_subparsers(dest="command") #создание парсера аргументов с описанием программы
+    cat_parser = subparsers.add_parser("cat", help="Вывести содержимое файла") #cоздаем парсер для команды cat с описанием
     cat_parser.add_argument("--input", required=True)
-    cat_parser.add_argument("-n", action="store_true", help="Нумеровать строки")
-    stats_parser = subparsers.add_parser("stats", help="Частоты слов")
+    cat_parser.add_argument("-n", action="store_true", help="Нумеровать строки")#добавляем опциональный флаг -n для нумерации строк
+    stats_parser = subparsers.add_parser("stats", help="Частоты слов")  #создаем парсер для команды stats с описанием
     stats_parser.add_argument("--input", required=True)
     stats_parser.add_argument("--top", type=int, default=5)
     args = parser.parse_args()
