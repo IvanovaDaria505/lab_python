@@ -1,62 +1,66 @@
-import csv, json, sys, os
 from pathlib import Path
-def is_valid_json_file(file_path: str) -> bool:
-    try:
-        if not os.path.exists(file_path) or os.path.getsize(file_path) == 0:
-            return False
-        
-        with open(file_path, 'r', encoding='utf-8') as file:
-            json_data = json.load(file)
-            return isinstance(json_data, list) and len(json_data) > 0 and all(isinstance(item, dict) for item in json_data) 
-    except:
-        return False
+import json
+import csv
 
-def is_valid_csv_file(file_path: str) -> bool:
-    try:
-        if not os.path.exists(file_path) or os.path.getsize(file_path) == 0:
-            return False
-            
-        with open(file_path, 'r', encoding='utf-8') as file:
-            reader = csv.reader(file)  
-            header = next(reader, None) 
-            return header is not None and len(header) > 0
-    except:
-        return False
+def ensure_relative(path: Path) -> None:
+    if path.is_absolute():
+        raise ValueError("Путь должен быть относительным")
 
 def json_to_csv(json_path: str, csv_path: str) -> None:
-    if not is_valid_json_file(json_path):
-        print("ValueError: Input file is not a valid JSON or is empty")
-        sys.exit(1) 
-    json_path=Path(json_path)
-    csv_path=Path(csv_path)
-    if json_path.suffix.lower() != ".json":
+    """
+    Преобразует JSON-файл в CSV.
+    Поддерживает список словарей [{...}, {...}], заполняет отсутствующие поля пустыми строками.
+    Кодировка UTF-8. Порядок колонок — как в первом объекте.
+    """
+    json_file = Path(json_path)
+    csv_file = Path(csv_path)
+    ensure_relative(json_file)
+    ensure_relative(csv_file)
+    if json_file.suffix.lower() != ".json":
         raise ValueError(f"Неверный формат входного файла: ожидается .json")
-    if csv_path.suffix.lower() != ".csv":
+    if csv_file.suffix.lower() != ".csv":
         raise ValueError(f"Неверный формат выходного файла: ожидается .csv")
+    if not json_file.exists():
+        raise FileNotFoundError("Файл не найден")
+    with json_file.open('r', encoding="utf-8") as f:
+        try:
+            data = json.load(f)
+        except json.JSONDecodeError:
+            raise ValueError("Некорректный JSON-файл")
+    if not isinstance(data, list) or not all(isinstance(value, dict) for value in data):
+        raise ValueError("Ожидается список словарей")
+    if not data:
+        raise ValueError("Пустой JSON-файл")
     
-
-    with open(json_path, 'r', encoding='utf-8') as json_file:
-        json_data = json.load(json_file) 
-
-    with open(csv_path, 'w', newline='', encoding='utf-8') as csvfile:
-        writer = csv.DictWriter(csvfile, fieldnames=json_data[0].keys()) 
-        writer.writeheader()  
-        writer.writerows(json_data) 
+    header = list(data[0].keys())
+    with csv_file.open("w", newline="", encoding="utf-8") as f:
+        writer = csv.DictWriter(f, fieldnames=header)
+        writer.writeheader()
+        for row in data:
+            writer.writerow({k: row.get(k, "") for k in header})
 
 def csv_to_json(csv_path: str, json_path: str) -> None:
-    if not is_valid_csv_file(csv_path):
-        print("ValueError: Input file is not a valid CSV or is empty")
-        sys.exit(1)
-    json_path=Path(json_path)
-    csv_path=Path(csv_path)
-    if json_path.suffix.lower() != ".json":
+    """
+    Преобразует CSV в JSON (список словарей).
+    Заголовок обязателен, значения сохраняются как строки.
+    """
+    csv_file = Path(csv_path)
+    json_file = Path(json_path)
+    ensure_relative(json_file)
+    ensure_relative(csv_file)
+    if json_file.suffix.lower() != ".json":
         raise ValueError(f"Неверный формат выходного файла: ожидается .json")
-    if csv_path.suffix.lower() != ".csv":
+    if csv_file.suffix.lower() != ".csv":
         raise ValueError(f"Неверный формат входного файла: ожидается .csv")
-
-    with open(csv_path, 'r', encoding='utf-8') as csvfile:
-        reader = csv.DictReader(csvfile) 
-        data = list(reader) 
+    if not csv_file.exists():
+        raise FileNotFoundError("Файл не найден")
+    with csv_file.open(encoding="utf-8") as f:
+        reader = csv.DictReader(f)
+        if reader.fieldnames is None:
+            raise ValueError("CSV не содержит заголовок")
+        data = [row for row in reader]
+    if not data:
+        raise ValueError("Пустой CSV")
     
-    with open(json_path, 'w', encoding='utf-8') as jsonfile:
-        json.dump(data, jsonfile, ensure_ascii=False, indent=4) 
+    with json_file.open("w", encoding="utf-8") as f:
+        json.dump(data, f, ensure_ascii=False, indent=2)
