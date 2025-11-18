@@ -48,6 +48,8 @@ if __name__ == "__main__":
     main()
 ```
 <img width="1944" height="296" alt="imange6-01-22" src="https://github.com/user-attachments/assets/4583a385-346c-4b16-85ce-1dfdd5c070ff" />
+
+
 ![alt text](images/imange6--02.png)
 ![alt text](images/imange6_03.png)
 #### help:
