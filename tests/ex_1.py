@@ -61,20 +61,20 @@ def test_top_n_empty():
 
 
 def test_full_pipeline():
-    text = "Привет мир! Привет всем. Красота вокруг."
+    text = "Привет мир! Привет всем. Мир прекрасен."
     normalized = normalize(text)
     tokens = tokenize(normalized)
     freq = count_freq(tokens)
     top_words = top_n(freq, 2)
 
-    assert normalized == "привет мир! привет всем. красота вокруг."
+    assert normalized == "привет мир! привет всем. мир прекрасен."
     assert tokens == [
         "привет",
         "мир",
         "привет",
         "всем",
-        "красота",
-        "вокруг",
+        "мир",
+        "прекрасен",
     ]
-    assert freq == {"привет": 2, "мир": 1, "всем": 1, "красота": 1, "вокруг": 1}
-    assert top_words == [ ("привет", 2)]
+    assert freq == {"привет": 2, "мир": 2, "всем": 1, "прекрасен": 1}
+    assert top_words == [("мир", 2), ("привет", 2)]
