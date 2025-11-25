@@ -92,7 +92,7 @@ import csv
 from src.json_csv import json_to_csv, csv_to_json
 
 
-# Базовые тесты для успешных сценариев
+
 @pytest.mark.parametrize(
     "test_name,data,expected_count",
     [
@@ -112,7 +112,7 @@ from src.json_csv import json_to_csv, csv_to_json
     ],
 )
 def test_json_to_csv_success(tmp_path, test_name, data, expected_count):
-    """Параметризованный тест успешных преобразований JSON в CSV"""
+    """параметризованный тест успешных преобразований JSON в CSV"""
     src = tmp_path / f"{test_name}.json"
     dst = tmp_path / f"{test_name}.csv"
 
@@ -131,14 +131,14 @@ def test_json_to_csv_success(tmp_path, test_name, data, expected_count):
     "test_name,csv_content,expected_count",
     [
         ("basic", "name,age\nAlice,25\nBob,30", 2),
-        ("special_chars", 'name,description\n"Alice","Test, comma"', 1),#специальные_символы #кавычки
+        ("special_chars", 'name,description\n"Alice","Test, comma"', 1),
         ("semicolon_delim", "name;age\nAlice;25\nBob;30", 2),
     ],
 )
 def test_csv_to_json_success(tmp_path, test_name, csv_content, expected_count):
     """Параметризованный тест успешных преобразований CSV в JSON"""
-    src = tmp_path / f"{test_name}.csv" #входные_данные
-    dst = tmp_path / f"{test_name}.json" #выходные_данные
+    src = tmp_path / f"{test_name}.csv" 
+    dst = tmp_path / f"{test_name}.json" 
 
     src.write_text(csv_content, encoding="utf-8")
     csv_to_json(str(src), str(dst))
@@ -150,7 +150,6 @@ def test_csv_to_json_success(tmp_path, test_name, csv_content, expected_count):
     assert len(data) == expected_count
 
 
-# Тесты для ошибок JSON
 @pytest.mark.parametrize(
     "test_name,file_content,expected_error",
     [
@@ -169,21 +168,18 @@ def test_json_to_csv_errors(tmp_path, test_name, file_content, expected_error):
     dst = tmp_path / "output.csv"
 
     if file_content is None:
-        # Тест для несуществующего файла
         with pytest.raises(expected_error):
             json_to_csv("nonexistent.json", str(dst))
     else: 
-        # Тест для файла с ошибкой в содержимом
         if isinstance(file_content, bytes):
             src.write_bytes(file_content)
         else:
             src.write_text(file_content, encoding="utf-8")
 
-        with pytest.raises(expected_error): #проверка_исключения
+        with pytest.raises(expected_error): 
             json_to_csv(str(src), str(dst))
 
 
-# Тесты для ошибок CSV
 @pytest.mark.parametrize(
     "test_name,file_content,expected_error",
     [
@@ -200,11 +196,9 @@ def test_csv_to_json_errors(tmp_path, test_name, file_content, expected_error):
     dst = tmp_path / "output.json"
 
     if file_content is None:
-        # Тест для несуществующего файла
         with pytest.raises(expected_error):
             csv_to_json("nonexistent.csv", str(dst))
     else:
-        # Тест для файла с ошибкой в содержимом
         if isinstance(file_content, bytes):
             src.write_bytes(file_content)
         else:
@@ -214,7 +208,6 @@ def test_csv_to_json_errors(tmp_path, test_name, file_content, expected_error):
             csv_to_json(str(src), str(dst))
 
 
-# Специальные тесты
 def test_json_csv_roundtrip(tmp_path):
     """Тест полного цикла преобразования"""
     original_json = tmp_path / "original.json"
@@ -228,10 +221,9 @@ def test_json_csv_roundtrip(tmp_path):
     csv_to_json(str(intermediate_csv), str(final_json))
 
     with final_json.open(encoding="utf-8") as f:
-        final_data = json.load(f) #чтение_результата
-
-    assert len(final_data) == 2 # #проверка_сохранения_данных
-    assert final_data[0]["name"] == "Alice" #проверка_целостности
+        final_data = json.load(f) 
+    assert len(final_data) == 2 
+    assert final_data[0]["name"] == "Alice"
 
 
 def test_unexpected_errors(monkeypatch, tmp_path):
@@ -244,8 +236,7 @@ def test_unexpected_errors(monkeypatch, tmp_path):
     def mock_getsize(path):
         raise RuntimeError("Unexpected error")
 
-    monkeypatch.setattr("os.path.getsize", mock_getsize) #подмена_функции
-
+    monkeypatch.setattr("os.path.getsize", mock_getsize) 
     with pytest.raises(ValueError, match="Неожиданная ошибка"):
         json_to_csv(str(src_json), str(dst_json))
 
@@ -271,16 +262,14 @@ def test_csv_empty_data_with_header(tmp_path):
     src = tmp_path / "only_header.csv"
     dst = tmp_path / "test.json"
 
-    src.write_text("name,age", encoding="utf-8")#преобразование_пустого_csv
-
+    src.write_text("name,age", encoding="utf-8")
     csv_to_json(str(src), str(dst))
 
     assert dst.exists()
     with dst.open(encoding="utf-8") as f:
         data = json.load(f)
 
-    assert len(data) == 0  # Пустой список, так как нет данных
-
+    assert len(data) == 0  
 
 def test_json_to_csv_wrong_extension(tmp_path):
     """Тест: JSON файл с неправильным расширением"""
