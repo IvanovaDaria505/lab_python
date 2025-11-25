@@ -92,7 +92,7 @@ import csv
 from src.json_csv import json_to_csv, csv_to_json
 
 
-
+#JSON→CSV
 @pytest.mark.parametrize(
     "test_name,data,expected_count",
     [
@@ -111,6 +111,7 @@ from src.json_csv import json_to_csv, csv_to_json
         ("unicode", [{"name": "Алиса", "message": "Привет! 🌍"}], 1),
     ],
 )
+JSON→CSV
 def test_json_to_csv_success(tmp_path, test_name, data, expected_count):
     """параметризованный тест успешных преобразований JSON в CSV"""
     src = tmp_path / f"{test_name}.json"
@@ -162,6 +163,7 @@ def test_csv_to_json_success(tmp_path, test_name, csv_content, expected_count):
         ("invalid_encoding", b"\xff\xfe\x00\x00", ValueError),
     ],
 )
+
 def test_json_to_csv_errors(tmp_path, test_name, file_content, expected_error):
     """Параметризованный тест ошибок JSON в CSV"""
     src = tmp_path / f"{test_name}.json"
