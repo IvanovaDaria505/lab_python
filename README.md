@@ -69,7 +69,10 @@ if __name__ == "__main__":
     except ValueError as e:
         print(f"Ошибка: {e}")
 ```
-![alt text](<прога 8 1.png>)
+
+![alt text](<imange8.1.png>)
+
+
 ### serialize.py
 ```python
 import json
@@ -110,6 +113,8 @@ if __name__ == "__main__":
     for student in loaded_students:
         print(student)
 ```
-![alt text](<прога 8 2.png>)
-![alt text](<прога 8 3.png>)
-![alt text](<прога 8 4.png>)
+
+
+![alt text](<imange8.2.png>)
+![alt text](<imange8.3.png>)
+![alt text](<imange8.4.png>)
