@@ -70,7 +70,7 @@ if __name__ == "__main__":
         print(f"Ошибка: {e}")
 ```
 
-![alt text](<imange8.1.png>)
+![alt text](imange8.1.png)
 
 
 ### serialize.py
@@ -115,6 +115,6 @@ if __name__ == "__main__":
 ```
 
 
-![alt text](<imange8.2.png>)
-![alt text](<imange8.3.png>)
-![alt text](<imange8.4.png>)
+![alt text](imange8.2.png)
+![alt text](imange8.3.png)
+![alt text](imange8.4.png)
