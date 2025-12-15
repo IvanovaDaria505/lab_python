@@ -1,67 +1,52 @@
+import re
 from dataclasses import dataclass
 from datetime import datetime, date
-import re
 
 @dataclass
-class Student:
+class Student():
     fio: str
     birthdate: str
     group: str
     gpa: float
-    
+
     def __post_init__(self):
-        if not re.match(r'^\d{4}-\d{2}-\d{2}$', self.birthdate):
-            raise ValueError(f"Неверный формат даты: {self.birthdate}. Используйте формат YYYY-MM-DD")
         try:
-            datetime.strptime(self.birthdate, "%Y-%m-%d")
+            self.birthdate = re.sub(r'[\D_]', '-', self.birthdate)
+            date_brth = datetime.fromisoformat(self.birthdate).date() #strptime(self.birthdate, '%Y/%m/%d').date()
         except ValueError:
-            raise ValueError(f"Неверная дата: {self.birthdate}")
-        if not (0 <= self.gpa <= 5):
-            raise ValueError(f"Средний балл должен быть в диапазоне от 0 до 5, получено: {self.gpa}")
-        if len(self.fio.split()) < 2:
-            raise ValueError(f"ФИО должно содержать имя и фамилию: {self.fio}")
+            raise ValueError('Введенная дата некорректна')
+        
+        if date_brth > date.today():
+            raise ValueError('Введенная дата еще не наступила')
+
+        if not(0 <= self.gpa <= 5):
+            raise ValueError('Введенный средний бал некорректен')
     
     def age(self) -> int:
-        birth_date = datetime.strptime(self.birthdate, "%Y-%m-%d").date()
         today = date.today()
-        
-        age = today.year - birth_date.year
-        
-        if (today.month, today.day) < (birth_date.month, birth_date.day):
-            age -= 1
-            
-        return age
+        date_birth = datetime.fromisoformat(self.birthdate).date() #strptime(self.birthdate, '%Y/%m/%d')
+        if today.month > date_birth.month:
+            return today.year - date_birth.year
+        elif today.month < date_birth.month:
+            return today.year - date_birth.year - 1
+        else:
+            return today.year - date_birth.year if today.day > date_birth.day else today.year - date_birth.year - 1
+                
     
     def to_dict(self) -> dict:
-        return {
-            "fio": self.fio,
-            "birthdate": self.birthdate,
-            "group": self.group,
-            "gpa": self.gpa
+        student_info_dict = {
+            'fio': self.fio,
+            'birthdate': self.birthdate,
+            'group': self.group,
+            'gpa': self.gpa
         }
+        return student_info_dict
     
     @classmethod
-    def from_dict(cls, data: dict):
-        return cls(
-            fio=data.get("fio", ""),
-            birthdate=data.get("birthdate", ""),
-            group=data.get("group", ""),
-            gpa=data.get("gpa", 0.0)
-        )
-    
-    def __str__(self) -> str:
-        return f"{self.fio}, группа: {self.group}, возраст: {self.age()}, средний балл: {self.gpa}"
+    def from_dict(cls, d: dict):
+        fields = list(d.keys())
+        st = cls(d[fields[0]], d[fields[1]], d[fields[2]], float(d[fields[3]]))
+        return st
 
-
-if __name__ == "__main__":
-    try:
-        student = Student(
-            fio="Иванов Иван Иванович",
-            birthdate="2007-02-19",
-            group="БИВТ-1-1",
-            gpa=3.5
-        )
-        print(student)
-        print(f"Словарь: {student.to_dict()}")
-    except ValueError as e:
-        print(f"Ошибка: {e}")
+    def __str__(self):
+        return f'ФИО: {self.fio}, группа: {self.group}, средний балл: {self.gpa}'

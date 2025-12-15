@@ -1,6 +1,3 @@
-## Лабораторная работа 9
-### group.py
-```python
 import csv
 from pathlib import Path
 from models import Student
@@ -89,24 +86,5 @@ if __name__ == "__main__":
      #print(group.add(Student('Иванова Дарья Михайловна', '2007-02-19', 'БИВТ-25-5', 5.0)))
      #print(group.find('Иванова Дарья Михайловна'))
      #print(group.remove('Иванова Дарья Михайвловна'))\
-     #print(group.update('Петров Дмитрий Григорьевич', **{'birthdate': '2005.05/05', 'group': 'БИВТ-25-4', 'gpa': 4.2})
-```
-
-
-# list() — вернуть всех студентов в виде списка Student
-![alt text](imange/imange__1.png)
-# add(student) — добавить нового студента в CSV
-
-![alt text](imange/imange__2.png)
-
-# find(substr) — найти студентов по подстроке в fiofind(substr) — найти студентов по подстроке в fio
-
-![alt text](imange/imange__3.png)
-
-# remove(fio) — удалить запись(и) с данным fio
-
-![alt text](imange/imange__4.png)
-
-# update(fio, **fields) — обновить поля существующего студента
-
-![alt text](imange/imange__5.png)
+     print(group.update('Петров Дмитрий Григорьевич', **{'birthdate': '2005.05-05', 'group': 'БИВТ-25-4', 'gpa': 4.2}))
+     
