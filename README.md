@@ -93,20 +93,20 @@ if __name__ == "__main__":
 ```
 
 
-# list() — вернуть всех студентов в виде списка Student
+#### list() — вернуть всех студентов в виде списка Student
 ![alt text](imange/imange__1.png)
-# add(student) — добавить нового студента в CSV
+#### add(student) — добавить нового студента в CSV
 
 ![alt text](imange/imange__2.png)
 
-# find(substr) — найти студентов по подстроке в fiofind(substr) — найти студентов по подстроке в fio
+#### find(substr) — найти студентов по подстроке в fiofind(substr) — найти студентов по подстроке в fio
 
 ![alt text](imange/imange__3.png)
 
-# remove(fio) — удалить запись(и) с данным fio
+#### remove(fio) — удалить запись(и) с данным fio
 
 ![alt text](imange/imange__4.png)
 
-# update(fio, **fields) — обновить поля существующего студента
+#### update(fio, **fields) — обновить поля существующего студента
 
 ![alt text](imange/imange__5.png)
