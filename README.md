@@ -260,7 +260,7 @@ print(f'Односвязанный список после добавления 
 print(sll) 
 ```
 ![alt text](imange/imange__10.png)
- ### теория
+ ### Теория
  #### Стек (Stack)
 Принцип: LIFO — Last In, First Out.
 Операции:
